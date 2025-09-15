@@ -5,9 +5,197 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StreaMax - Movie Streaming Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .hero-gradient { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card-hover { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .card-hover:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+        .demo-badge { 
+            position: absolute; 
+            top: 10px; 
+            right: 10px; 
+            background: rgba(255,255,255,0.9); 
+            color: #333; 
+            padding: 4px 8px; 
+            border-radius: 4px; 
+            font-size: 12px; 
+            font-weight: 600;
+        }
+    </style>
 </head>
 <body class="bg-gray-900 text-white">
-    <h1 class="text-center text-4xl mt-20">Welcome to StreaMax Demo</h1>
-    <p class="text-center mt-4">🎬 This is a sample movie streaming platform interface.</p>
+    <!-- Demo Notice -->
+    <div class="bg-yellow-500 text-black text-center py-2 px-4 text-sm font-medium">
+        🎬 Demo Movie Streaming Platform - Sample Interface Only
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bg-gray-800 shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold text-purple-400">StreaMax</h1>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#" class="text-gray-300 hover:text-white transition-colors">Home</a>
+                    <a href="#" class="text-gray-300 hover:text-white transition-colors">Movies</a>
+                    <a href="#" class="text-gray-300 hover:text-white transition-colors">TV Shows</a>
+                    <a href="#" class="text-gray-300 hover:text-white transition-colors">My List</a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <input type="text" placeholder="Search movies..." class="bg-gray-700 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                    <button class="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg transition-colors">Sign In</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient py-20 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-5xl font-bold mb-6">Unlimited Movies & TV Shows</h2>
+            <p class="text-xl mb-8 text-gray-200">Watch anywhere. Cancel anytime. Start your free trial today.</p>
+            <button class="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors shadow-lg">
+                Start Free Trial
+            </button>
+        </div>
+    </section>
+
+    <!-- Featured Movies -->
+    <section class="py-16 px-4">
+        <div class="max-w-7xl mx-auto">
+            <h3 class="text-3xl font-bold mb-8">Featured Movies</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="featured-movies">
+                <!-- Movies will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular TV Shows -->
+    <section class="py-16 px-4 bg-gray-800">
+        <div class="max-w-7xl mx-auto">
+            <h3 class="text-3xl font-bold mb-8">Popular TV Shows</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="tv-shows">
+                <!-- TV shows will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Movie Modal -->
+    <div id="movie-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
+        <div class="bg-gray-800 rounded-lg p-8 max-w-2xl w-full mx-4 relative">
+            <div class="demo-badge">DEMO</div>
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+            <div id="modal-content">
+                <!-- Modal content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 py-12 px-4">
+        <div class="max-w-7xl mx-auto text-center">
+            <h4 class="text-2xl font-bold text-purple-400 mb-4">StreaMax</h4>
+            <p class="text-gray-400 mb-6">Your ultimate destination for movies and TV shows</p>
+            <div class="flex justify-center space-x-6 text-gray-400">
+                <a href="#" class="hover:text-white transition-colors">About</a>
+                <a href="#" class="hover:text-white transition-colors">Help Center</a>
+                <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+                <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sample movie data
+        const movies = [
+            { id: 1, title: "Space Odyssey", genre: "Sci-Fi", year: 2023, rating: "8.5", description: "An epic journey through the cosmos exploring humanity's place in the universe." },
+            { id: 2, title: "Ocean's Mystery", genre: "Thriller", year: 2023, rating: "7.8", description: "A deep-sea adventure uncovering ancient secrets beneath the waves." },
+            { id: 3, title: "City Lights", genre: "Drama", year: 2022, rating: "9.1", description: "A heartwarming story of love and hope in the bustling metropolis." },
+            { id: 4, title: "Wild Adventure", genre: "Action", year: 2023, rating: "8.2", description: "High-octane thrills in the untamed wilderness." }
+        ];
+
+        const tvShows = [
+            { id: 5, title: "Tech Revolution", genre: "Documentary", year: 2023, rating: "8.7", description: "Exploring how technology shapes our modern world." },
+            { id: 6, title: "Family Bonds", genre: "Comedy", year: 2022, rating: "8.9", description: "Hilarious adventures of a quirky family navigating life together." },
+            { id: 7, title: "Mystery Island", genre: "Mystery", year: 2023, rating: "8.4", description: "Unraveling the secrets of a remote tropical island." },
+            { id: 8, title: "Future World", genre: "Sci-Fi", year: 2023, rating: "9.0", description: "A glimpse into humanity's potential future." }
+        ];
+
+        // Create movie cards
+        function createMovieCard(item, isShow = false) {
+            return `
+                <div class="bg-gray-700 rounded-lg overflow-hidden card-hover cursor-pointer relative" onclick="openModal(${item.id}, ${isShow})">
+                    <div class="demo-badge">DEMO</div>
+                    <div class="h-64 bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center">
+                        <div class="text-center">
+                            <div class="text-4xl mb-2">🎬</div>
+                            <div class="font-semibold">${item.title}</div>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <h4 class="font-semibold text-lg mb-2">${item.title}</h4>
+                        <div class="flex justify-between items-center text-sm text-gray-300">
+                            <span>${item.genre}</span>
+                            <span>⭐ ${item.rating}</span>
+                        </div>
+                        <div class="text-xs text-gray-400 mt-1">${item.year}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Populate movies and TV shows
+        document.getElementById('featured-movies').innerHTML = movies.map(movie => createMovieCard(movie)).join('');
+        document.getElementById('tv-shows').innerHTML = tvShows.map(show => createMovieCard(show, true)).join('');
+
+        // Modal functions
+        function openModal(id, isShow = false) {
+            const items = isShow ? tvShows : movies;
+            const item = items.find(i => i.id === id);
+            
+            document.getElementById('modal-content').innerHTML = `
+                <h3 class="text-2xl font-bold mb-4">${item.title}</h3>
+                <div class="flex items-center space-x-4 mb-4 text-sm text-gray-300">
+                    <span class="bg-purple-600 px-2 py-1 rounded">${item.genre}</span>
+                    <span>${item.year}</span>
+                    <span>⭐ ${item.rating}</span>
+                </div>
+                <p class="text-gray-300 mb-6">${item.description}</p>
+                <div class="flex space-x-4">
+                    <button class="bg-red-600 hover:bg-red-700 px-6 py-3 rounded-lg font-semibold transition-colors flex items-center">
+                        ▶️ Play Now
+                    </button>
+                    <button class="bg-gray-600 hover:bg-gray-500 px-6 py-3 rounded-lg font-semibold transition-colors">
+                        + My List
+                    </button>
+                </div>
+                <div class="mt-4 text-sm text-yellow-600 bg-yellow-100 bg-opacity-10 p-3 rounded">
+                    📺 This is a demo interface. Actual streaming functionality would require backend services and content licensing.
+                </div>
+            `;
+            
+            document.getElementById('movie-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('movie-modal').classList.add('hidden');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('movie-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Search functionality
+        document.querySelector('input[type="text"]').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                alert('🔍 Search functionality is part of the demo interface. In a real app, this would search through the movie database.');
+            }
+        });
+    </script>
 </body>
 </html>
